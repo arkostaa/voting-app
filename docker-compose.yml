@@ -1,0 +1,27 @@
+version: '3.8'
+services:
+  service_a:
+    build: ./service_a
+    ports:
+      - "5000:5000"
+    environment:
+      - OTEL_SERVICE_NAME=service-a
+      - OTEL_TRACES_EXPORTER=otlp
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://jaeger:4317
+    depends_on:
+      - jaeger
+
+  service_b:
+    build: ./service_b
+    environment:
+      - OTEL_SERVICE_NAME=service-b
+      - OTEL_TRACES_EXPORTER=otlp
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://jaeger:4317
+    depends_on:
+      - jaeger
+
+  jaeger:
+    image: jaegertracing/all-in-one:latest
+    ports:
+      - "16686:16686"
+      - "4317:4317"
