@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>DevOps Voting App</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+    <div class="container mt-5">
+        <div class="card shadow">
+            <div class="card-header bg-primary text-white">
+                <h2>опрос</h2>
+            </div>
+            <div class="card-body text-center">
+                {% if message %}
+                <div class="alert alert-success">{{ message }}</div>
+                {% endif %}
+
+                <div class="row mb-4">
+                    <div class="col">
+                        <form method="POST">
+                            <button name="vote" value="python" class="btn btn-warning btn-lg w-100 p-4">
+                                <b>Python</b>
+                            </button>
+                        </form>
+                        <h3 class="mt-2">{{ data.python }} голосов</h3>
+                    </div>
+                    <div class="col">
+                        <form method="POST">
+                            <button name="vote" value="go" class="btn btn-info btn-lg w-100 p-4">
+                                <b>Go</b>
+                            </button>
+                        </form>
+                        <h3 class="mt-2">{{ data.go }} голосов</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer text-muted text-center">
+                Powered by Flask, Redis & OpenTelemetry
+            </div>
+        </div>
+    </div>
+</body>
+</html>
