@@ -1,5 +1,5 @@
+version: '3.8'
 services:
-  # фронтенд
   service_a:
     build: ./service_a
     ports:
@@ -8,28 +8,30 @@ services:
       - OTEL_SERVICE_NAME=voting-frontend
       - OTEL_TRACES_EXPORTER=otlp
       - OTEL_EXPORTER_OTLP_ENDPOINT=http://jaeger:4317
+      # --- НАСТРОЙКИ ОПРОСА ---
+      - POLL_TITLE=Cats vs Dogs
+      - OPTION_A=Cats
+      - OPTION_B=Dogs
     depends_on:
       - jaeger
       - service_b
 
-  # бэкенд
   service_b:
     build: ./service_b
     environment:
       - OTEL_SERVICE_NAME=voting-backend
       - OTEL_TRACES_EXPORTER=otlp
       - OTEL_EXPORTER_OTLP_ENDPOINT=http://jaeger:4317
+      - OPTION_A=Cats
+      - OPTION_B=Dogs
     depends_on:
       - jaeger
       - redis
 
-  # БД
   redis:
     image: redis:alpine
     ports:
       - "6379:6379"
-
-  # Мониторинг
   jaeger:
     image: jaegertracing/all-in-one:latest
     ports:

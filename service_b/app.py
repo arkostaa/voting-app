@@ -1,4 +1,5 @@
 import time
+import os
 import redis
 from flask import Flask, request, jsonify
 
@@ -6,26 +7,31 @@ app = Flask(__name__)
 
 r = redis.Redis(host='redis', port=6379, db=0)
 
+OPT_A = os.environ.get("OPTION_A", "Option A")
+OPT_B = os.environ.get("OPTION_B", "Option B")
+
 @app.route("/vote", methods=["POST"])
 def vote():
-    time.sleep(0.1)
+    time.sleep(0.1) # Simulate load
     
     data = request.json
     tech = data.get("tech")
     
-    if tech in ["python", "go"]:
+    if tech in [OPT_A, OPT_B]:
         r.incr(tech)
         return jsonify({"status": "ok", "voted_for": tech})
-    return jsonify({"error": "invalid choice"}), 400
+    
+    return jsonify({"error": "Invalid option. Allowed: " + OPT_A + ", " + OPT_B}), 400
 
 @app.route("/results", methods=["GET"])
 def results():
-    python_votes = r.get("python") or 0
-    go_votes = r.get("go") or 0
+    val_a = r.get(OPT_A) or 0
+    val_b = r.get(OPT_B) or 0
     
+    # Form a dynamic response, e.g., {"Cats": 5, "Dogs": 10}
     return jsonify({
-        "python": int(python_votes),
-        "go": int(go_votes)
+        OPT_A: int(val_a),
+        OPT_B: int(val_b)
     })
 
 if __name__ == "__main__":
