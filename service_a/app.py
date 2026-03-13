@@ -1,12 +1,13 @@
 import os
 import requests
 from flask import Flask, render_template, request, jsonify
+from prometheus_flask_exporter import PrometheusMetrics
 
 app = Flask(__name__)
+metrics = PrometheusMetrics(app)
 
 BACKEND_URL = "http://service_b:5000"
 
-# Read settings from Docker Compose (or set defaults)
 TITLE = os.environ.get("POLL_TITLE", "Default Poll")
 OPT_A = os.environ.get("OPTION_A", "Option A")
 OPT_B = os.environ.get("OPTION_B", "Option B")

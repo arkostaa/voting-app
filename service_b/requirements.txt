@@ -3,3 +3,4 @@ requests
 opentelemetry-distro
 opentelemetry-exporter-otlp
 redis
+prometheus-flask-exporter
