@@ -1,5 +1,6 @@
 import os
 import requests
+import socket
 from flask import Flask, render_template, request, jsonify
 from prometheus_flask_exporter import PrometheusMetrics
 
@@ -20,11 +21,14 @@ def index():
     except:
         data = {OPT_A: 0, OPT_B: 0}
     
+    container_id = socket.gethostname()
+    
     return render_template("index.html", 
                            title=TITLE, 
                            option_a=OPT_A, 
                            option_b=OPT_B, 
-                           data=data)
+                           data=data,
+                           container_id=container_id)
 
 @app.route("/api/vote", methods=["POST"])
 def api_vote():

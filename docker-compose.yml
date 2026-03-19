@@ -2,8 +2,6 @@ version: '3.8'
 services:
   service_a:
     build: ./service_a
-    ports:
-      - "5000:5000"
     environment:
       - OTEL_SERVICE_NAME=voting-frontend
       - OTEL_TRACES_EXPORTER=otlp
@@ -53,3 +51,12 @@ services:
       - prometheus
     environment:
       - GF_SECURITY_ADMIN_PASSWORD=admin # Пароль от админки
+
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+    - service_a
