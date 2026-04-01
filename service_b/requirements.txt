@@ -2,5 +2,6 @@ flask
 requests
 opentelemetry-distro
 opentelemetry-exporter-otlp
-redis
+psycopg2-binary
 prometheus-flask-exporter
+werkzeug<3.0.0
