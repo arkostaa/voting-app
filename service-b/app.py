@@ -4,8 +4,10 @@ import psycopg2
 from psycopg2.extras import RealDictCursor
 from flask import Flask, request, jsonify
 import logging
+from prometheus_flask_exporter import PrometheusMetrics
 
 app = Flask(__name__)
+metrics = PrometheusMetrics(app)
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)

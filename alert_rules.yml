@@ -1,0 +1,37 @@
+groups:
+  - name: voting_app_alerts
+    rules:
+      - alert: InstanceDown
+        expr: up == 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Сервис {{ $labels.instance }} упал!"
+
+      - alert: HighErrorRate
+        expr: rate(flask_http_request_total{status=~"5.."}[1m]) > 0.5
+        for: 2m
+        labels:
+          severity: warning
+        annotations:
+          summary: "На фронтенде много ошибок 500!"
+
+  - name: database_alerts
+    rules:
+      - alert: PostgresDown
+        expr: pg_up == 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "База данных упала!"
+          description: "Prometheus не может получить метрики от базы данных."
+
+      - alert: PostgresSlowQueries
+        expr: rate(pg_stat_database_xact_commit[1m]) > 1
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "База данных тормозит"

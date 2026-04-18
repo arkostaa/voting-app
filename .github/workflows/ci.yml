@@ -1,0 +1,31 @@
+name: Voting App CI
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: Run linter for all services
+        run: |
+          pip install flake8
+          flake8 service-a/ service-b/ --select=E9,F63,F7,F82 --show-source --statistics
+
+      - name: Build and test Docker Compose
+        run: |
+          echo "DB_USER=test" > .env
+          echo "DB_PASSWORD=test" >> .env
+          echo "DB_NAME=test" >> .env
+          
+          docker compose build
